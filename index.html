@@ -15,11 +15,17 @@
 
   <link rel="icon" type="image/png" href="assets/logo.png">
 
+  <meta name="description" content="WebCrafters TY – Professional web development, UI/UX design, and web applications.">
+  <meta name="keywords" content="Web Development, UI UX, Web Applications, WebCrafters TY">
+  <meta name="author" content="WebCrafters TY">
+  <meta name="color-scheme" content="light dark">
+
   <style>
     :root {
       --primary-color: #3b82f6;
       --secondary-color: #6366f1;
       --accent-color: #06b6d4;
+      color-scheme: light dark;
 
       /* Safe defaults */
       --bg-color: #0f172a;
@@ -40,6 +46,7 @@
 
     /* Light Theme Variables */
     body.light {
+      color-scheme: light;
       --bg-color: #f8fafc;
       --surface-color: rgba(255, 255, 255, 0.8);
       --text-main: #0f172a;
@@ -57,6 +64,7 @@
 
     /* Dark Theme Variables (default matched to root, but explicit for toggling logic if needed) */
     body.dark {
+      color-scheme: dark;
       --bg-color: #0b0f1a;
       --surface-color: rgba(30, 41, 59, 0.4);
       --text-main: #f1f5f9;
@@ -914,13 +922,10 @@
       letter-spacing: 2px;
     }
   </style>
-
 </head>
-<meta name="description" content="WebCrafters TY – Professional web development, UI/UX design, and web applications.">
-<meta name="keywords" content="Web Development, UI UX, Web Applications, WebCrafters TY">
-<meta name="author" content="WebCrafters TY">
 
 <body class="dark">
+
   <!-- Scroll Progress Indicator -->
   <div id="scrollProgress"></div>
 
