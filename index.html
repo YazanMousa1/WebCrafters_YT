@@ -47,19 +47,19 @@
     /* Light Theme Variables */
     body.light {
       color-scheme: light;
-      --bg-color: #f8fafc;
-      --surface-color: rgba(255, 255, 255, 0.8);
+      --bg-color: #ffffff;
+      --surface-color: rgba(248, 250, 252, 0.8);
       --text-main: #0f172a;
-      --text-muted: #475569;
-      --border-color: rgba(0, 0, 0, 0.1);
-      --glass-bg: rgba(255, 255, 255, 0.7);
+      --text-muted: #64748b;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --glass-bg: rgba(255, 255, 255, 0.8);
       --glass-border: rgba(0, 0, 0, 0.05);
       --shadow-color: rgba(0, 0, 0, 0.05);
-      /* Light mode gradients - hero ends at #f8fafc which matches mid start */
-      --hero-end-color: #f8fafc;
-      --hero-gradient: radial-gradient(circle at top, #dbeafe, var(--hero-end-color));
-      --mid-gradient: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
-      --footer-gradient: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+      /* Light mode gradients */
+      --hero-end-color: #ffffff;
+      --hero-gradient: radial-gradient(circle at top, #f0f9ff, var(--hero-end-color));
+      --mid-gradient: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+      --footer-gradient: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
     }
 
     /* Dark Theme Variables (default matched to root, but explicit for toggling logic if needed) */
@@ -1143,8 +1143,7 @@
             </div>
           </div>
 
-          <form id="contactForm" class="mt-4" name="contact" method="POST" data-netlify="true">
-            <input type="hidden" name="form-name" value="contact" />
+          <form id="contactForm" class="mt-4" name="contact" method="POST">
             <input class="form-control mb-3" type="text" name="name" placeholder="Name" required data-en-ph="Name"
               data-ar-ph="الاسم">
             <input class="form-control mb-3" type="email" name="email" placeholder="Email" required data-en-ph="Email"
@@ -1262,6 +1261,8 @@
         body.classList.toggle("light");
 
         const isDark = body.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+
         const icons = [modeToggle.querySelector('i'), modeToggleMobile.querySelector('i')];
 
         icons.forEach(icon => {
@@ -1287,6 +1288,7 @@
 
       setTimeout(() => {
         currentLang = currentLang === "en" ? "ar" : "en";
+        localStorage.setItem("lang", currentLang);
         const langTexts = [langToggle, langToggleMobile];
         langTexts.forEach(t => t.textContent = currentLang === "en" ? "ع" : "EN");
 
@@ -1308,16 +1310,36 @@
     langToggle.onclick = () => toggleLanguage(langToggle);
     langToggleMobile.onclick = () => toggleLanguage(langToggleMobile);
 
-    /* Initial Language */
-    const setInitialLang = () => {
-      document.querySelectorAll("[data-en]").forEach(el => {
-        el.textContent = el.dataset.en;
+    /* Initial Language & Theme - Persistence */
+    const initSettings = () => {
+      const savedTheme = localStorage.getItem("theme");
+      const savedLang = localStorage.getItem("lang");
+
+      if (savedTheme === "light") {
+        body.classList.replace("dark", "light");
+        const icons = [modeToggle.querySelector('i'), modeToggleMobile.querySelector('i')];
+        icons.forEach(i => {
+          i.className = "bi bi-sun-fill theme-icon-sun";
+        });
+      }
+
+      if (savedLang === "ar") {
+        currentLang = "ar";
+        langToggle.textContent = "EN";
+        langToggleMobile.textContent = "EN";
+        document.documentElement.dir = "rtl";
+        document.documentElement.lang = "ar";
+      }
+
+      // Apply texts for the determined language
+      document.querySelectorAll("[data-" + currentLang + "]").forEach(el => {
+        el.textContent = el.dataset[currentLang];
       });
-      document.querySelectorAll("[data-en-ph]").forEach(el => {
-        el.placeholder = el.dataset.enPh;
+      document.querySelectorAll(`[data-${currentLang}-ph]`).forEach(el => {
+        el.placeholder = el.dataset[currentLang + "Ph"];
       });
     };
-    setInitialLang();
+    initSettings();
 
 
     /* Contact Form - Netlify Native Handling */
